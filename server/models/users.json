@@ -1,0 +1,14 @@
+{
+    "messi": {
+        "name":"Lio Messi",
+        "password":"Cactus2290"
+    },
+    "aguero":{
+        "name":"Kun Aguero",
+        "password":"Cactus2290"
+    },
+    "mascherano":{
+        "name":"Javier Mascherano",
+        "password":"Cactus2290"
+    }
+}

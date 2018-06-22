@@ -1,0 +1,20 @@
+{
+  "name": "example-create-react-app-express",
+  "version": "1.0.0",
+  "scripts": {
+    "preinstall": "cd client && npm install",
+    "client": "cd client && npm start",
+    "server": "nodemon server/server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "server-prod": "cd client && npm run build && cd .. && NODE_ENV=production nodemon server/server.js"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "jsonwebtoken": "^8.3.0",
+    "socket.io": "^1.4.6"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0",
+    "nodemon": "^1.17.5"
+  }
+}

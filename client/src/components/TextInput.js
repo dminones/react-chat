@@ -1,0 +1,59 @@
+import React, { Component } from "react";
+import styled from "styled-components";
+import { sendMessage } from "../services/chat";
+import { getUsername } from "../services/user";
+
+const Input = styled.input`
+  border: 10px solid #000;
+  bottom: 0;
+  height: 60px;
+  left: 0;
+  outline: none;
+  padding-left: 10px;
+  position: absolute;
+  right: 0;
+  width: 100%;
+  font-size: 100%;
+`;
+
+const EMPTY_INPUT = "";
+
+class TextInput extends Component {
+  state = {
+    input: EMPTY_INPUT
+  };
+
+  constructor(props) {
+    super(props);
+    this._handleKeyPress = this._handleKeyPress.bind(this);
+    this._handleOnChange = this._handleOnChange.bind(this);
+  }
+
+  _handleKeyPress(e) {
+    if (e.key === "Enter" && this.state.input !== EMPTY_INPUT) {
+      sendMessage(getUsername(), this.state.input);
+      this.setState({
+        input: EMPTY_INPUT
+      });
+    }
+  }
+
+  _handleOnChange(e) {
+    this.setState({
+      input: e.target.value
+    });
+  }
+
+  render() {
+    return (
+      <Input
+        value={this.state.input}
+        placeholder="Type here..."
+        onKeyPress={this._handleKeyPress}
+        onChange={this._handleOnChange}
+      />
+    );
+  }
+}
+
+export default TextInput;
