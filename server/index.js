@@ -1,20 +1,15 @@
 const express = require("express");
 const app = express();
-const http = require("http").Server(app);
 const path = require("path");
-const bodyParser = require("body-parser");
 const AuthController = require("./controllers/auth.controller");
 const User = require("./models/user.model");
-const jwt = require("jsonwebtoken");
-const Constants = require("./config/constants");
 
 // set the port of our application
-var port = process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 
-var users = {};
-var sockets = {};
+require("./middleware")(app);
+
 var api = express.Router();
-
 // Authentication
 api.post("/auth/login", AuthController.login);
 
@@ -31,8 +26,6 @@ api.get("/", function(req, res) {
   res.status(201);
 });
 
-// parse urlencoded request bodies into req.body
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api", api);
 
 if (process.env.NODE_ENV === "production") {
@@ -112,58 +105,8 @@ app.delete("/api/user/:username/exit", function(req, res) {
   res.status(404);
 });
 
-var io = require("socket.io").listen(
-  app.listen(port, function() {
-    console.log("Server running on http://localhost:" + port);
-  })
-);
-
-io.use(function(socket, next) {
-  console.log("TRYING LOGIN");
-  const { sessionSecret } = Constants.security;
-  if (socket.handshake.query && socket.handshake.query.token) {
-    jwt.verify(
-      socket.handshake.query.token,
-      sessionSecret,
-      async (err, decoded) => {
-        if (err) return next(new Error("Authentication error"));
-        socket.decoded = decoded;
-        next();
-      }
-    );
-  } else {
-    next(new Error("Authentication error"));
-  }
+const server = app.listen(port, function() {
+  console.log("Server running on http://localhost:" + port);
 });
 
-var messages = [];
-io.on("connection", function(socket) {
-  const user = User.findOne(socket.decoded.username);
-  var sid = socket.id.replace("/", "");
-  sockets[sid] = socket;
-  console.log("connection -> ", user);
-  socket.emit("currentUser", user);
-
-  messages.forEach(function(obj) {
-    console.log("msg -> ", obj);
-    socket.emit("chat", obj);
-  });
-
-  socket.on("chat", function(msg) {
-    const username = socket.decoded.username;
-    const message = msg.message;
-    const user = User.findOne(username);
-
-    var toSend = {
-      username: user.name,
-      message: message,
-      timestamp: Date.now()
-    };
-    messages.push(toSend);
-    console.log(
-      "[CHAT]\tfrom: '" + username + "' - message: '" + message + "'"
-    );
-    socket.broadcast.emit("chat", toSend);
-    socket.emit("chat", toSend);
-  });
-});
+require("./socket")(server);

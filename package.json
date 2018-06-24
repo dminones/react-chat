@@ -4,9 +4,9 @@
   "scripts": {
     "preinstall": "cd client && npm install",
     "client": "cd client && npm start",
-    "server": "nodemon server/server.js",
+    "server": "nodemon server/",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "server-prod": "cd client && npm run build && cd .. && NODE_ENV=production nodemon server/server.js"
+    "server-prod": "cd client && npm run build && cd .. && NODE_ENV=production nodemon server/"
   },
   "dependencies": {
     "express": "^4.13.4",

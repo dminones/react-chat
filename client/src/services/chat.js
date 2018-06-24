@@ -61,3 +61,12 @@ export function getCurrentUser(callback) {
 
   socket.on("currentUser", callback);
 }
+
+export function disconnect() {
+  if (!socket) {
+    console.log("NO SOCKET");
+    return;
+  }
+
+  socket.disconnect();
+}

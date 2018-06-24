@@ -6,7 +6,7 @@ import Message from "./Message";
 
 const UsersArea = styled.div`
   height: 100%;
-  padding: 10px;
+  padding: 30px 15px;
   overflow: auto;
 `;
 
@@ -25,9 +25,9 @@ const Logout = styled.div`
   }
 `;
 
-const CurrentUserWrapper = styled.div`
-  padding: 10px;
-`;
+const CurrentUserWrapper = styled.div``;
+
+const Title = styled.h3``;
 
 const CurrentUser = ({ user, logout }) => {
   if (!user) return null;
@@ -59,23 +59,32 @@ class ChatUsers extends Component {
 
   subscribeToUpdates() {
     subscribeUserUpdates(users => {
+      const currentUser = this.state.currentUser;
+
+      const otherUsers = currentUser
+        ? users.filter(
+            u => u.username.indexOf(this.state.currentUser.username) < 0
+          )
+        : users;
+      console.log(otherUsers);
       this.setState(() => ({
-        users: users
+        users: otherUsers
       }));
-      console.log("USERS", users);
     });
 
     getCurrentUser(user => {
-      this.setState(() => ({
-        currentUser: user
+      this.setState(prevState => ({
+        currentUser: user,
+        users: prevState.users.filter(
+          u => u.username.indexOf(user.username) < 0
+        )
       }));
-      console.log("CURRENT USER", user);
     });
   }
 
   renderItem(index, key) {
-    const message = this.state.messages[index];
-    return <Message key={key} message={message} />;
+    const user = this.state.users[index];
+    return <div key={key}>{user.name}</div>;
   }
 
   render() {
@@ -85,6 +94,13 @@ class ChatUsers extends Component {
     return (
       <UsersArea>
         <CurrentUser user={this.state.currentUser} logout={this.props.logout} />
+        <Title>Connected users</Title>
+        <ReactList
+          itemRenderer={this.renderItem}
+          length={this.state.users.length}
+          type="uniform"
+          ref={c => (this.list = c)}
+        />
       </UsersArea>
     );
   }
