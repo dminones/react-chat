@@ -1,30 +1,13 @@
-const jwt = require("jsonwebtoken");
-const Constants = require("./config/constants");
 const User = require("./models/user.model");
+const AuthController = require("./controllers/auth.controller");
 
 module.exports = function(server) {
-  var sockets = {};
   var io = require("socket.io").listen(server);
   var users = {};
-
-  io.use(function(socket, next) {
-    const { sessionSecret } = Constants.security;
-    if (socket.handshake.query && socket.handshake.query.token) {
-      jwt.verify(
-        socket.handshake.query.token,
-        sessionSecret,
-        async (err, decoded) => {
-          if (err) return next(new Error("Authentication error"));
-          socket.decoded = decoded;
-          next();
-        }
-      );
-    } else {
-      next(new Error("Authentication error"));
-    }
-  });
-
   var messages = [];
+
+  io.use(AuthController.authenticateSocket);
+
   io.on("connection", function(socket) {
     const { username } = socket.decoded;
     const user = User.findOne(username);

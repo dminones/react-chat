@@ -1,6 +1,8 @@
 const BaseController = require("./base.controller");
 const User = require("../models/user.model");
 
+authenticatonError = new Error("Authentication error");
+
 class AuthController extends BaseController {
   login(req, res, next) {
     console.log("LOGIN");
@@ -19,6 +21,19 @@ class AuthController extends BaseController {
       return res.status(200).json({ token });
     } catch (err) {
       next(err);
+    }
+  }
+
+  authenticateSocket(socket, next) {
+    const token = socket.handshake.query ? socket.handshake.query.token : null;
+    if (token) {
+      User.validateToken(token, async (err, decoded) => {
+        if (err) return next(authenticatonError);
+        socket.decoded = decoded;
+        next();
+      });
+    } else {
+      next(authenticatonError);
     }
   }
 }
