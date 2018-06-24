@@ -29,7 +29,6 @@ const ChatRoom = styled.div`
 const Users = styled.div`
   width: 30%;
   float: left;
-  background: #ececec;
   height: 100%;
 `;
 

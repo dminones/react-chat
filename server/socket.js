@@ -26,17 +26,29 @@ module.exports = function(server) {
 
   var messages = [];
   io.on("connection", function(socket) {
-    const user = User.findOne(socket.decoded.username);
-    users[socket.decoded.username] = user;
+    const { username } = socket.decoded;
+    const user = User.findOne(username);
 
-    console.log("connected users -> ", users);
-    socket.broadcast.emit("usersUpdate", Object.values(users));
-    socket.emit("usersUpdate", Object.values(users));
-    console.log("connection -> ", user);
+    if (!users[username]) {
+      users[username] = user;
+
+      socket.broadcast.emit("chat", {
+        log: user.name + " ingreso al chat",
+        timestamp: Date.now()
+      });
+
+      messages.push({
+        log: user.name + " ingreso al chat",
+        timestamp: Date.now()
+      });
+
+      console.log("connected users -> ", users);
+      socket.broadcast.emit("usersUpdate", Object.values(users));
+      socket.emit("usersUpdate", Object.values(users));
+      console.log("connection -> ", user);
+    }
+
     socket.emit("currentUser", user);
-
-    var sid = socket.id.replace("/", "");
-    sockets[sid] = socket;
 
     messages.forEach(function(obj) {
       console.log("msg -> ", obj);
@@ -65,6 +77,16 @@ module.exports = function(server) {
       console.log("DISCONNECT", reason);
       delete users[socket.decoded.username];
       socket.broadcast.emit("usersUpdate", Object.values(users));
+
+      socket.broadcast.emit("chat", {
+        log: user.name + " se fue del chat",
+        timestamp: Date.now()
+      });
+
+      messages.push({
+        log: user.name + " se fue del chat",
+        timestamp: Date.now()
+      });
     });
   });
 };

@@ -8,6 +8,8 @@ const UsersArea = styled.div`
   height: 100%;
   padding: 30px 15px;
   overflow: auto;
+  color: white;
+  background: #4d394b;
 `;
 
 const UserName = styled.div`

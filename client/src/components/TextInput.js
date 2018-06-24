@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { sendMessage } from "../services/chat";
 
 const Input = styled.input`
-  border: 10px solid #000;
+  border: 10px solid #4c9689;
   bottom: 0;
   height: 60px;
   left: 0;

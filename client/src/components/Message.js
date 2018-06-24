@@ -36,6 +36,11 @@ const MessageBlock = styled.div`
 `;
 
 const MessageText = styled.span``;
+const MessageLog = styled.div`
+  padding: 2px 20px;
+  text-align: center;
+  color: #555;
+`;
 
 const Username = styled.span`
   font-weight: 700;
@@ -45,13 +50,16 @@ const Username = styled.span`
   color: ${({ color }) => color};
 `;
 
-const Message = ({ message }) => (
-  <MessageBlock>
-    <Username color={getUsernameColor(message.username)}>
-      {message.username}
-    </Username>
-    <MessageText>{message.message}</MessageText>
-  </MessageBlock>
-);
+const Message = ({ message }) => {
+  if (message.log) return <MessageLog>{message.log}</MessageLog>;
+  return (
+    <MessageBlock>
+      <Username color={getUsernameColor(message.username)}>
+        {message.username}
+      </Username>
+      <MessageText>{message.message}</MessageText>
+    </MessageBlock>
+  );
+};
 
 export default Message;
