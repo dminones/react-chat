@@ -1,10 +1,49 @@
 const User = require("./models/user.model");
 const AuthController = require("./controllers/auth.controller");
 
+var users = {};
+var messages = [];
+
+function addMessage(socket, message) {
+  messages.push(message);
+  socket.broadcast.emit("chat", message);
+  socket.emit("chat", message);
+}
+
+function addConnectedUser(socket, user) {
+  const username = user.username;
+  if (!users[username]) {
+    users[username] = user;
+    addMessage(socket, {
+      log: user.name + " ingreso al chat",
+      timestamp: Date.now()
+    });
+    socket.broadcast.emit("usersUpdate", Object.values(users));
+    socket.emit("usersUpdate", Object.values(users));
+  }
+}
+
+function removeConnectedUser(socket, user) {
+  delete users[user.username];
+  socket.broadcast.emit("usersUpdate", Object.values(users));
+  addMessage(socket, {
+    log: user.name + " se fue del chat",
+    timestamp: Date.now()
+  });
+}
+
+function sendAllMessages(socket) {
+  messages.forEach(function(obj) {
+    socket.emit("chat", obj);
+  });
+}
+
+function updateCurrentUser(socket, user) {
+  socket.emit("currentUser", user);
+}
+
 module.exports = function(server) {
   var io = require("socket.io").listen(server);
-  var users = {};
-  var messages = [];
 
   io.use(AuthController.authenticateSocket);
 
@@ -12,64 +51,24 @@ module.exports = function(server) {
     const { username } = socket.decoded;
     const user = User.findOne(username);
 
-    if (!users[username]) {
-      users[username] = user;
-
-      socket.broadcast.emit("chat", {
-        log: user.name + " ingreso al chat",
-        timestamp: Date.now()
-      });
-
-      messages.push({
-        log: user.name + " ingreso al chat",
-        timestamp: Date.now()
-      });
-
-      console.log("connected users -> ", users);
-      socket.broadcast.emit("usersUpdate", Object.values(users));
-      socket.emit("usersUpdate", Object.values(users));
-      console.log("connection -> ", user);
-    }
-
-    socket.emit("currentUser", user);
-
-    messages.forEach(function(obj) {
-      console.log("msg -> ", obj);
-      socket.emit("chat", obj);
-    });
+    addConnectedUser(socket, user);
+    updateCurrentUser(socket, user);
+    sendAllMessages(socket);
 
     socket.on("chat", function(msg) {
       const username = socket.decoded.username;
       const message = msg.message;
       const user = User.findOne(username);
-
-      var toSend = {
+      addMessage(socket, {
         username: user.name,
         message: message,
         timestamp: Date.now()
-      };
-      messages.push(toSend);
-      console.log(
-        "[CHAT]\tfrom: '" + username + "' - message: '" + message + "'"
-      );
-      socket.broadcast.emit("chat", toSend);
-      socket.emit("chat", toSend);
+      });
     });
 
     socket.on("disconnect", function(reason) {
-      console.log("DISCONNECT", reason);
-      delete users[socket.decoded.username];
-      socket.broadcast.emit("usersUpdate", Object.values(users));
-
-      socket.broadcast.emit("chat", {
-        log: user.name + " se fue del chat",
-        timestamp: Date.now()
-      });
-
-      messages.push({
-        log: user.name + " se fue del chat",
-        timestamp: Date.now()
-      });
+      const user = User.findOne(socket.decoded.username);
+      removeConnectedUser(socket, user);
     });
   });
 };
