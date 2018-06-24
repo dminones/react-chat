@@ -28,7 +28,6 @@ class Login extends Component {
 
   handleLogin(e) {
     e.preventDefault();
-    console.log("login", this.state);
     const that = this;
     fetch("/api/auth/login", {
       method: "POST",

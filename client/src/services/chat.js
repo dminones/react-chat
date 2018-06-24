@@ -26,13 +26,13 @@ export function onUnauthorized(callback) {
   });
 }
 
-export function sendMessage(username, message) {
+export function sendMessage(message) {
   if (!socket) {
-    console.log("NO SOCKET, username ->", username, message);
+    console.log("NO SOCKET, username ->", message);
     return;
   }
 
-  socket.emit("chat", { username, message });
+  socket.emit("chat", { message });
 }
 
 export function subscribeMessages(callback) {
@@ -42,4 +42,22 @@ export function subscribeMessages(callback) {
   }
 
   socket.on("chat", callback);
+}
+
+export function subscribeUserUpdates(callback) {
+  if (!socket) {
+    console.log("NO SOCKET");
+    return;
+  }
+
+  socket.on("usersUpdate", callback);
+}
+
+export function getCurrentUser(callback) {
+  if (!socket) {
+    console.log("NO SOCKET");
+    return;
+  }
+
+  socket.on("currentUser", callback);
 }

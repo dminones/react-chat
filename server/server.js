@@ -138,10 +138,11 @@ io.use(function(socket, next) {
 
 var messages = [];
 io.on("connection", function(socket) {
-  console.log("CONNECTION");
+  const user = User.findOne(socket.decoded.username);
   var sid = socket.id.replace("/", "");
   sockets[sid] = socket;
-  console.log("connection -> ", sid);
+  console.log("connection -> ", user);
+  socket.emit("currentUser", user);
 
   messages.forEach(function(obj) {
     console.log("msg -> ", obj);
@@ -149,7 +150,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on("chat", function(msg) {
-    var username = msg.username;
+    var username = socket.decoded.username;
     var message = msg.message;
 
     var toSend = {

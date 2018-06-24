@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { sendMessage } from "../services/chat";
-import { getUsername } from "../services/user";
 
 const Input = styled.input`
   border: 10px solid #000;
@@ -32,7 +31,7 @@ class TextInput extends Component {
 
   _handleKeyPress(e) {
     if (e.key === "Enter" && this.state.input !== EMPTY_INPUT) {
-      sendMessage(getUsername(), this.state.input);
+      sendMessage(this.state.input);
       this.setState({
         input: EMPTY_INPUT
       });
