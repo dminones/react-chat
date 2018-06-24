@@ -10,9 +10,33 @@ const UsersArea = styled.div`
   overflow: auto;
 `;
 
-const CurrentUser = ({ user }) => {
+const UserName = styled.div`
+  font-weight: bold;
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 130%;
+`;
+
+const Logout = styled.div`
+  display: inline-block;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const CurrentUserWrapper = styled.div`
+  padding: 10px;
+`;
+
+const CurrentUser = ({ user, logout }) => {
   if (!user) return null;
-  return <h3>{user.name}</h3>;
+  return (
+    <CurrentUserWrapper>
+      <UserName>{user.name}</UserName>
+      <Logout onClick={logout}>(logout)</Logout>
+    </CurrentUserWrapper>
+  );
 };
 
 class ChatUsers extends Component {
@@ -60,7 +84,7 @@ class ChatUsers extends Component {
     }
     return (
       <UsersArea>
-        <CurrentUser user={this.state.currentUser} />
+        <CurrentUser user={this.state.currentUser} logout={this.props.logout} />
       </UsersArea>
     );
   }

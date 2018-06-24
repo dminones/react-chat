@@ -7,3 +7,8 @@ export const setToken = token => {
     localStorage.setItem("token", token);
   }
 };
+
+export const logout = () => {
+  console.log("LOGOUT");
+  setToken(null);
+};

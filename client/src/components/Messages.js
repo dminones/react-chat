@@ -33,7 +33,7 @@ class Messages extends Component {
       this.setState(prevState => ({
         messages: [...prevState.messages, msg]
       }));
-      this.list.scrollTo(this.state.messages.length - 1);
+      if (this.list) this.list.scrollTo(this.state.messages.length - 1);
     });
   }
 

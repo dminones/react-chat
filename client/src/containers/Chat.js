@@ -3,8 +3,8 @@ import TextInput from "../components/TextInput";
 import Messages from "../components/Messages";
 import ChatUsers from "../components/ChatUsers";
 import styled from "styled-components";
-import { getToken } from "../services/user";
 import { connectSocket, onUnauthorized } from "../services/chat";
+import { logout } from "../services/user";
 import { Redirect } from "react-router-dom";
 
 const Page = styled.div`
@@ -50,7 +50,7 @@ class Chat extends Component {
       return (
         <Redirect
           to={{
-            pathname: "/login",
+            pathname: "/",
             state: { from: this.props.location }
           }}
         />
@@ -61,7 +61,13 @@ class Chat extends Component {
       <Page>
         <PageContainer>
           <Users>
-            <ChatUsers connected={this.state.connected} />
+            <ChatUsers
+              connected={this.state.connected}
+              logout={() => {
+                logout();
+                this.setState({ unauthorized: true });
+              }}
+            />
           </Users>
           <ChatRoom>
             <Messages connected={this.state.connected} />
