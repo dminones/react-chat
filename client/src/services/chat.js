@@ -1,13 +1,45 @@
-import openSocket from 'socket.io-client';
-const  socket = openSocket('http://localhost:5000');
-socket.on('connect', () => console.log("CONNECTED"));
+import openSocket from "socket.io-client";
+import { getToken, setToken } from "../services/user";
+let socket;
 
-function sendMessage(username, message) {
-    socket.emit('chat', { username, message } );
+export function getSocket() {
+  return socket;
 }
 
-function subscribeMessages(callback) {
-    socket.on('chat',callback);
+export function connectSocket(callback) {
+  const token = getToken();
+  if (token) {
+    socket = openSocket("http://localhost:5000", {
+      query: { token }
+    });
+  }
+
+  socket.on("connect", callback);
 }
 
-export { sendMessage, subscribeMessages };
+export function onUnauthorized(callback) {
+  socket.on("error", function(err) {
+    if (err === "Authentication error") {
+      setToken(null);
+      callback();
+    }
+  });
+}
+
+export function sendMessage(username, message) {
+  if (!socket) {
+    console.log("NO SOCKET, username ->", username, message);
+    return;
+  }
+
+  socket.emit("chat", { username, message });
+}
+
+export function subscribeMessages(callback) {
+  if (!socket) {
+    console.log("NO SOCKET");
+    return;
+  }
+
+  socket.on("chat", callback);
+}

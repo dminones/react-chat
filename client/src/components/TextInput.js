@@ -14,6 +14,7 @@ const Input = styled.input`
   right: 0;
   width: 100%;
   font-size: 100%;
+  background: ${p => (p.disabled ? "#ddd" : "#fff")};
 `;
 
 const EMPTY_INPUT = "";
@@ -48,9 +49,10 @@ class TextInput extends Component {
     return (
       <Input
         value={this.state.input}
-        placeholder="Type here..."
+        placeholder={this.props.connected ? "Type here..." : "Connecting..."}
         onKeyPress={this._handleKeyPress}
         onChange={this._handleOnChange}
+        disabled={!this.props.connected}
       />
     );
   }

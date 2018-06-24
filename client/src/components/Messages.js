@@ -1,55 +1,61 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import { subscribeMessages } from '../services/chat';
-import ReactList from 'react-list';
-import Message from './Message';
+import React, { Component } from "react";
+import styled from "styled-components";
+import { subscribeMessages } from "../services/chat";
+import ReactList from "react-list";
+import Message from "./Message";
 
 const ChatArea = styled.div`
-    height: 100%;
-    padding-bottom: 60px;
-    overflow:auto;
+  height: 100%;
+  padding-bottom: 60px;
+  overflow: auto;
 `;
 
 class Messages extends Component {
+  state = {
+    messages: []
+  };
 
-    state = {
-        messages: []
-    };
+  constructor(props) {
+    super(props);
+    this.renderItem = this.renderItem.bind(this);
+    this.subscribeToMessages = this.subscribeToMessages.bind(this);
+  }
 
-    constructor(props) {
-        super(props);
-        this.renderItem = this.renderItem.bind(this);
-
-        subscribeMessages((msg)=>{
-            //console.log(msg);
-            console.log(this.state.messages);
-            this.setState( prevState => ({
-                messages: [ ...prevState.messages, msg ]
-            }))
-            this.list.scrollTo(this.state.messages.length-1);
-        });
+  componentDidUpdate(prevProps) {
+    if (this.props.connected && this.props.connected !== prevProps.connected) {
+      this.subscribeToMessages();
     }
+  }
 
-    renderItem (index,key) {
-        const message = this.state.messages[index];
-        return (
-            <Message key={key} message={message} />
-        );
-    }
+  subscribeToMessages() {
+    subscribeMessages(msg => {
+      this.setState(prevState => ({
+        messages: [...prevState.messages, msg]
+      }));
+      this.list.scrollTo(this.state.messages.length - 1);
+    });
+  }
 
-    render() {
-        return (
-            <ChatArea>
-                <ReactList
-                    itemRenderer={this.renderItem}
-                    length={this.state.messages.length}
-                    type='uniform'
-                    ref={c => this.list = c} 
-                />
-            </ChatArea>
-        );
+  renderItem(index, key) {
+    const message = this.state.messages[index];
+    return <Message key={key} message={message} />;
+  }
+
+  render() {
+    if (!this.props.connected) {
+      return <div>connecting</div>;
     }
+    return (
+      <ChatArea>
+        <ReactList
+          itemRenderer={this.renderItem}
+          length={this.state.messages.length}
+          type="uniform"
+          ref={c => (this.list = c)}
+        />
+      </ChatArea>
+    );
+  }
 }
 
 export default Messages;
-

@@ -5,6 +5,8 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const AuthController = require("./controllers/auth.controller");
 const User = require("./models/user.model");
+const jwt = require("jsonwebtoken");
+const Constants = require("./config/constants");
 
 // set the port of our application
 var port = process.env.PORT || 5000;
@@ -116,8 +118,27 @@ var io = require("socket.io").listen(
   })
 );
 
+io.use(function(socket, next) {
+  console.log("TRYING LOGIN");
+  const { sessionSecret } = Constants.security;
+  if (socket.handshake.query && socket.handshake.query.token) {
+    jwt.verify(
+      socket.handshake.query.token,
+      sessionSecret,
+      async (err, decoded) => {
+        if (err) return next(new Error("Authentication error"));
+        socket.decoded = decoded;
+        next();
+      }
+    );
+  } else {
+    next(new Error("Authentication error"));
+  }
+});
+
 var messages = [];
 io.on("connection", function(socket) {
+  console.log("CONNECTION");
   var sid = socket.id.replace("/", "");
   sockets[sid] = socket;
   console.log("connection -> ", sid);
