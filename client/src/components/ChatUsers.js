@@ -6,7 +6,6 @@ import Message from "./Message";
 
 const UsersArea = styled.div`
   height: 100%;
-  padding: 30px 15px;
   overflow: auto;
   color: white;
   background: #4d394b;
@@ -27,9 +26,15 @@ const Logout = styled.div`
   }
 `;
 
-const CurrentUserWrapper = styled.div``;
+const CurrentUserWrapper = styled.div`
+  padding: 30px 15px;
+  background: #4c9689;
+`;
 
 const Title = styled.h3``;
+const StyledReactList = styled.div`
+  padding: 15px;
+`;
 
 const CurrentUser = ({ user, logout }) => {
   if (!user) return null;
@@ -96,13 +101,15 @@ class ChatUsers extends Component {
     return (
       <UsersArea>
         <CurrentUser user={this.state.currentUser} logout={this.props.logout} />
-        <Title>Connected users</Title>
-        <ReactList
-          itemRenderer={this.renderItem}
-          length={this.state.users.length}
-          type="uniform"
-          ref={c => (this.list = c)}
-        />
+        <StyledReactList>
+          <Title>Connected users</Title>
+          <ReactList
+            itemRenderer={this.renderItem}
+            length={this.state.users.length}
+            type="uniform"
+            ref={c => (this.list = c)}
+          />
+        </StyledReactList>
       </UsersArea>
     );
   }

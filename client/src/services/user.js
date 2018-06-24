@@ -13,5 +13,5 @@ export const setToken = token => {
 export const logout = () => {
   console.log("LOGOUT");
   disconnect();
-  setToken(null);
+  localStorage.setItem("token", null);
 };
