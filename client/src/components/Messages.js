@@ -8,6 +8,7 @@ const ChatArea = styled.div`
   height: 100%;
   padding-bottom: 60px;
   overflow: auto;
+  padding-top: 20px;
 `;
 
 class Messages extends Component {

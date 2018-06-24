@@ -12,7 +12,7 @@ const UsersArea = styled.div`
 
 const CurrentUser = ({ user }) => {
   if (!user) return null;
-  return <div>{user.name}</div>;
+  return <h3>{user.name}</h3>;
 };
 
 class ChatUsers extends Component {

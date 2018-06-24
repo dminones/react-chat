@@ -150,11 +150,12 @@ io.on("connection", function(socket) {
   });
 
   socket.on("chat", function(msg) {
-    var username = socket.decoded.username;
-    var message = msg.message;
+    const username = socket.decoded.username;
+    const message = msg.message;
+    const user = User.findOne(username);
 
     var toSend = {
-      username: username,
+      username: user.name,
       message: message,
       timestamp: Date.now()
     };
