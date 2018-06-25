@@ -31,6 +31,7 @@ class TextInput extends Component {
   _handleKeyPress(e) {
     if (e.key === "Enter" && this.state.input !== EMPTY_INPUT) {
       sendMessage(this.state.input);
+      tiping(false);
       this.setState({
         input: EMPTY_INPUT
       });
