@@ -15,9 +15,15 @@ npm run dev
 
 This will run both client and server app with hot reload.
 
+### Users Login
+
+In order to login you need a username and password.  
+User info is stored on a json file: [/server/models/users.json](https://github.com/dminones/react-chat/blob/master/server/models/users.json)  
+You can use one of the existent users or create newones by editing this file.
+
 ### Client App
 
-This app is built using [Create React App] (https://github.com/facebook/create-react-app). 
+This app is built using [Create React App](https://github.com/facebook/create-react-app). 
 
 Run client separately
 
@@ -48,6 +54,6 @@ Scripts being used to run on heroku from package json:
 ## Useful links
 
 - [Requirements](Chat.md)
-- [Create React App] (https://github.com/facebook/create-react-app)
-- [socket.io] (https://socket.io/)
-- [Create React App working with backend and deployed to heroku] (https://medium.freecodecamp.org/how-to-make-create-react-app-work-with-a-node-backend-api-7c5c48acb1b0)
+- [Create React App](https://github.com/facebook/create-react-app)
+- [socket.io](https://socket.io/)
+- [Create React App working with backend and deployed to heroku](https://medium.freecodecamp.org/how-to-make-create-react-app-work-with-a-node-backend-api-7c5c48acb1b0)
