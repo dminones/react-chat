@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { sendMessage, tiping } from "../services/chat";
 
 const Input = styled.input`
   bottom: 0;
@@ -30,8 +29,8 @@ class TextInput extends Component {
 
   _handleKeyPress(e) {
     if (e.key === "Enter" && this.state.input !== EMPTY_INPUT) {
-      sendMessage(this.state.input);
-      tiping(false);
+      this.props.sendMessage(this.state.input);
+      this.props.tiping(false);
       this.setState({
         input: EMPTY_INPUT
       });
@@ -40,7 +39,7 @@ class TextInput extends Component {
 
   _handleOnChange(e) {
     const input = e.target.value;
-    tiping(input !== EMPTY_INPUT);
+    this.props.tiping(input !== EMPTY_INPUT);
 
     this.setState({
       input

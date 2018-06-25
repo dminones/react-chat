@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { subscribeUserUpdates, getCurrentUser } from "../services/chat";
 import ReactList from "react-list";
 
 const UsersArea = styled.div`
@@ -49,50 +48,13 @@ const CurrentUser = ({ user, logout }) => {
 };
 
 class ChatUsers extends Component {
-  state = {
-    users: [],
-    currentUser: null
-  };
-
   constructor(props) {
     super(props);
     this.renderItem = this.renderItem.bind(this);
-    this.subscribeToUpdates = this.subscribeToUpdates.bind(this);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.connected && this.props.connected !== prevProps.connected) {
-      this.subscribeToUpdates();
-    }
-  }
-
-  subscribeToUpdates() {
-    subscribeUserUpdates(users => {
-      console.log(users);
-      const currentUser = this.state.currentUser;
-
-      const otherUsers = currentUser
-        ? users.filter(
-            u => u.username.indexOf(this.state.currentUser.username) < 0
-          )
-        : users;
-      this.setState(() => ({
-        users: otherUsers
-      }));
-    });
-
-    getCurrentUser(user => {
-      this.setState(prevState => ({
-        currentUser: user,
-        users: prevState.users.filter(
-          u => u.username.indexOf(user.username) < 0
-        )
-      }));
-    });
   }
 
   renderItem(index, key) {
-    const user = this.state.users[index];
+    const user = this.props.users[index];
     return (
       <div key={key}>
         {user.name} {user.tiping && <Tiping>tiping...</Tiping>}
@@ -103,12 +65,12 @@ class ChatUsers extends Component {
   render() {
     return (
       <UsersArea>
-        <CurrentUser user={this.state.currentUser} logout={this.props.logout} />
+        <CurrentUser user={this.props.currentUser} logout={this.props.logout} />
         <StyledReactList>
           <Title>Connected users</Title>
           <ReactList
             itemRenderer={this.renderItem}
-            length={this.state.users.length}
+            length={this.props.users.length}
             type="uniform"
             ref={c => (this.list = c)}
           />

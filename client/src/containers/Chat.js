@@ -3,7 +3,16 @@ import TextInput from "../components/TextInput";
 import Messages from "../components/Messages";
 import ChatUsers from "../components/ChatUsers";
 import styled from "styled-components";
-import { connectSocket, onUnauthorized, onDisconnect } from "../services/chat";
+import {
+  connectSocket,
+  onUnauthorized,
+  onDisconnect,
+  subscribeUserUpdates,
+  getCurrentUser,
+  subscribeMessages,
+  sendMessage,
+  tiping
+} from "../services/chat";
 import { logout } from "../services/user";
 import { Redirect } from "react-router-dom";
 
@@ -35,7 +44,10 @@ const Users = styled.div`
 
 class Chat extends Component {
   state = {
-    connected: false
+    connected: false,
+    users: [],
+    currentUser: {},
+    messages: []
   };
 
   componentDidMount() {
@@ -44,6 +56,25 @@ class Chat extends Component {
     });
     onUnauthorized(() => this.setState({ unauthorized: true }));
     onDisconnect(() => this.setState({ connected: false }));
+
+    getCurrentUser(user => {
+      this.setState(() => ({
+        currentUser: user
+      }));
+
+      subscribeUserUpdates(users => {
+        this.setState(() => ({
+          users: users.filter(u => u.username.indexOf(user.username) < 0)
+        }));
+      });
+    });
+
+    subscribeMessages(msg => {
+      this.setState(prevState => ({
+        messages: [...prevState.messages, msg]
+      }));
+      if (this.list) this.list.scrollTo(this.state.messages.length - 1);
+    });
   }
 
   render() {
@@ -63,7 +94,8 @@ class Chat extends Component {
         <PageContainer>
           <Users>
             <ChatUsers
-              connected={this.state.connected}
+              currentUser={this.state.currentUser}
+              users={this.state.users}
               logout={() => {
                 logout();
                 this.setState({ unauthorized: true });
@@ -71,8 +103,12 @@ class Chat extends Component {
             />
           </Users>
           <ChatRoom>
-            <Messages connected={this.state.connected} />
-            <TextInput connected={this.state.connected} />
+            <Messages messages={this.state.messages} />
+            <TextInput
+              connected={this.state.connected}
+              sendMessage={sendMessage}
+              tiping={tiping}
+            />
           </ChatRoom>
         </PageContainer>
       </Page>
