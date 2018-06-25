@@ -32,7 +32,7 @@ This app is build using vainilla nodejs with no boilerplate.
 Run server separately
 
 ```
-npm run client
+npm run server
 ```
 
 ## Heroku Deploy
