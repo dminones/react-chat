@@ -88,3 +88,12 @@ export function disconnect() {
 
   socket.disconnect();
 }
+
+export function tiping(tiping) {
+  if (!socket) {
+    console.log("NO SOCKET");
+    return;
+  }
+  console.log("TIPING");
+  socket.emit("tiping", tiping);
+}

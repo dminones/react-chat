@@ -34,6 +34,10 @@ const StyledReactList = styled.div`
   padding: 15px;
 `;
 
+const Tiping = styled.span`
+  color: #ccc;
+`;
+
 const CurrentUser = ({ user, logout }) => {
   if (!user) return null;
   return (
@@ -64,6 +68,7 @@ class ChatUsers extends Component {
 
   subscribeToUpdates() {
     subscribeUserUpdates(users => {
+      console.log(users);
       const currentUser = this.state.currentUser;
 
       const otherUsers = currentUser
@@ -88,7 +93,11 @@ class ChatUsers extends Component {
 
   renderItem(index, key) {
     const user = this.state.users[index];
-    return <div key={key}>{user.name}</div>;
+    return (
+      <div key={key}>
+        {user.name} {user.tiping && <Tiping>tiping...</Tiping>}
+      </div>
+    );
   }
 
   render() {

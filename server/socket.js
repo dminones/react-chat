@@ -76,5 +76,12 @@ module.exports = function(server) {
       const user = User.findOne(socket.decoded.username);
       removeConnectedUser(socket, user);
     });
+
+    socket.on("tiping", function(tiping) {
+      const user = User.findOne(socket.decoded.username);
+      user.setTiping(tiping);
+      users[user.username] = user;
+      socket.broadcast.emit("usersUpdate", Object.values(users));
+    });
   });
 };

@@ -32,6 +32,10 @@ class User {
     this.password = user.password;
   }
 
+  setTiping(tiping) {
+    this.tiping = tiping;
+  }
+
   /**
    * Authenticate - check if the passwords are the same
    * @public

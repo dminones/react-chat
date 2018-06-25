@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { sendMessage } from "../services/chat";
+import { sendMessage, tiping } from "../services/chat";
 
 const Input = styled.input`
   bottom: 0;
@@ -38,8 +38,17 @@ class TextInput extends Component {
   }
 
   _handleOnChange(e) {
+    const input = e.target.value;
+    if (!this.state.input && input) {
+      tiping(true);
+    }
+
+    if (this.state.input && !input) {
+      tiping(false);
+    }
+
     this.setState({
-      input: e.target.value
+      input
     });
   }
 
