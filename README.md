@@ -37,7 +37,7 @@ npm run server
 
 ## Heroku Deploy
 
-The app is deployed on heroku: https://react-chat-dminones.herokuapp.com/
+The app is deployed on heroku: https://react-chat-dminones.herokuapp.com/  
 Scripts being used to run on heroku from package json:
 
 ```
