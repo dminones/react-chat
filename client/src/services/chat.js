@@ -9,7 +9,7 @@ export function getSocket() {
 export function connectSocket(callback) {
   const token = getToken();
   if (token) {
-    socket = openSocket("http://localhost:5000", {
+    socket = openSocket("/", {
       query: { token }
     });
   }
