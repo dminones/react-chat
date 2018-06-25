@@ -6,7 +6,8 @@
     "client": "cd client && npm start",
     "server": "nodemon server/",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "server-prod": "cd client && npm run build && cd .. && NODE_ENV=production nodemon server/"
+    "server-prod": "cd client && npm run build && cd .. && NODE_ENV=production nodemon server/",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "dependencies": {
     "express": "^4.13.4",
