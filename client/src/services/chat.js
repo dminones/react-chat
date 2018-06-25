@@ -1,5 +1,5 @@
 import openSocket from "socket.io-client";
-import { getToken, setToken } from "../services/user";
+import { getToken, logout } from "../services/user";
 let socket;
 
 export function getSocket() {
@@ -20,7 +20,7 @@ export function connectSocket(callback) {
 export function onUnauthorized(callback) {
   socket.on("error", function(err) {
     if (err === "Authentication error") {
-      setToken(null);
+      logout();
       callback();
     }
   });

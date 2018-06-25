@@ -1,14 +1,26 @@
 {
-    "messi": {
-        "name":"Lio Messi",
-        "password":"Cactus2290"
-    },
-    "aguero":{
-        "name":"Kun Aguero",
-        "password":"Cactus2290"
-    },
-    "mascherano":{
-        "name":"Javier Mascherano",
-        "password":"Cactus2290"
-    }
+  "lmessi": {
+    "name": "Lio Messi",
+    "password": "Seleccion2018"
+  },
+  "saguero": {
+    "name": "Kun Aguero",
+    "password": "Seleccion2018"
+  },
+  "jmascherano": {
+    "name": "Javier Mascherano",
+    "password": "Seleccion2018"
+  },
+  "notamendi": {
+    "name": "Niclas Otamendi",
+    "password": "Seleccion2018"
+  },
+  "ghiguain": {
+    "name": "Gonzalo Higuain",
+    "password": "Seleccion2018"
+  },
+  "gmercado": {
+    "name": "Gabriel Mercado",
+    "password": "Seleccion2018"
+  }
 }

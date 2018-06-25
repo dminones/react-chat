@@ -2,18 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 const COLORS = [
-  "#e21400",
-  "#91580f",
-  "#f8a700",
-  "#f78b00",
-  "#58dc00",
-  "#287b00",
-  "#a8f07a",
-  "#4ae8c4",
-  "#3b88eb",
-  "#3824aa",
-  "#a700ff",
-  "#d300e7"
+  "#bd4030",
+  "#e1b840",
+  "#7f962a",
+  "#76be9f",
+  "#36183c",
+  "#36183c",
+  "#563e57",
+  "#cc4876"
 ];
 
 const getUsernameColor = username => {

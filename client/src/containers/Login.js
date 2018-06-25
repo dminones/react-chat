@@ -1,47 +1,39 @@
 import React, { Component } from "react";
-import stlyed from "styled-components";
-import { setToken } from "../services/user";
+import styled from "styled-components";
+import LoginForm from "../components/LoginForm";
+
 import { Redirect } from "react-router-dom";
 
-export const Form = stlyed.form`
-	padding: 0;
+const FormWrapper = styled.div`
+  background: white;
+  margin: 100px auto;
+  max-width: 500px;
+  min-height: 300px;
+  border-radius: 10px;
+  padding: 50px 20px;
 `;
 
-export const EmailInput = stlyed.input`
-	
+const FormPage = styled.div`
+  background: #f2f2f2;
+  height: 100%;
+  position: absolute;
+  width: 100%;
 `;
 
-export const PasswordInput = stlyed.input`
-	
+const Title = styled.h1`
+  text-align: center;
+  width: 100%;
 `;
 
 class Login extends Component {
-  state = {
-    username: "",
-    password: ""
-  };
-
+  state = {};
   constructor() {
     super();
-    this.handleLogin = this.handleLogin.bind(this);
+    this.onLogin = this.onLogin.bind(this);
   }
 
-  handleLogin(e) {
-    e.preventDefault();
-    const that = this;
-    fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: `username=${this.state.username}&password=${this.state.password}`
-    })
-      .then(resp => resp.json()) // Transform the data into json
-      .then(function(data) {
-        setToken(data.token);
-        that.setState({ redirectToReferrer: true });
-      })
-      .catch(console.log);
+  onLogin() {
+    this.setState({ redirectToReferrer: true });
   }
 
   render() {
@@ -55,21 +47,12 @@ class Login extends Component {
     }
 
     return (
-      <Form>
-        <input
-          value={this.state.username}
-          onChange={e => this.setState({ username: e.target.value })}
-          type="text"
-          placeholder="Enter username"
-        />
-        <input
-          value={this.state.password}
-          onChange={e => this.setState({ password: e.target.value })}
-          type="password"
-          placeholder="Enter password"
-        />
-        <button onClick={this.handleLogin}>Login</button>
-      </Form>
+      <FormPage>
+        <FormWrapper>
+          <Title>React Chat</Title>
+          <LoginForm onLogin={this.onLogin} />
+        </FormWrapper>
+      </FormPage>
     );
   }
 }

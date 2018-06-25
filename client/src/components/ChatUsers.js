@@ -2,13 +2,11 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import { subscribeUserUpdates, getCurrentUser } from "../services/chat";
 import ReactList from "react-list";
-import Message from "./Message";
 
 const UsersArea = styled.div`
   height: 100%;
   overflow: auto;
   color: white;
-  background: #4d394b;
 `;
 
 const UserName = styled.div`
@@ -73,7 +71,6 @@ class ChatUsers extends Component {
             u => u.username.indexOf(this.state.currentUser.username) < 0
           )
         : users;
-      console.log(otherUsers);
       this.setState(() => ({
         users: otherUsers
       }));
@@ -96,7 +93,7 @@ class ChatUsers extends Component {
 
   render() {
     if (!this.props.connected) {
-      return <div>Connecting ...</div>;
+      return null;
     }
     return (
       <UsersArea>

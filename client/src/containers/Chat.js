@@ -30,6 +30,7 @@ const Users = styled.div`
   width: 30%;
   float: left;
   height: 100%;
+  background: #4d394b;
 `;
 
 class Chat extends Component {

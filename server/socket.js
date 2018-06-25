@@ -4,20 +4,26 @@ const AuthController = require("./controllers/auth.controller");
 var users = {};
 var messages = [];
 
-function addMessage(socket, message) {
+function addMessage(socket, message, emitToSocket = true) {
   messages.push(message);
   socket.broadcast.emit("chat", message);
-  socket.emit("chat", message);
+  if (emitToSocket) {
+    socket.emit("chat", message);
+  }
 }
 
 function addConnectedUser(socket, user) {
   const username = user.username;
   if (!users[username]) {
     users[username] = user;
-    addMessage(socket, {
-      log: user.name + " ingreso al chat",
-      timestamp: Date.now()
-    });
+    addMessage(
+      socket,
+      {
+        log: user.name + " ingreso al chat",
+        timestamp: Date.now()
+      },
+      false
+    );
     socket.broadcast.emit("usersUpdate", Object.values(users));
     socket.emit("usersUpdate", Object.values(users));
   }

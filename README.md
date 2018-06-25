@@ -2,6 +2,6 @@
 
 A chat app built with react and socket.io
 
-## Usefull links
+## Useful links
 
 - [Requirements](Chat.md)

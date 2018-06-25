@@ -44,7 +44,7 @@ class Messages extends Component {
 
   render() {
     if (!this.props.connected) {
-      return <div>connecting</div>;
+      return null;
     }
     return (
       <ChatArea>
