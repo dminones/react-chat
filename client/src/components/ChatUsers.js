@@ -92,9 +92,6 @@ class ChatUsers extends Component {
   }
 
   render() {
-    if (!this.props.connected) {
-      return null;
-    }
     return (
       <UsersArea>
         <CurrentUser user={this.state.currentUser} logout={this.props.logout} />

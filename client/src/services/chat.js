@@ -18,11 +18,28 @@ export function connectSocket(callback) {
 }
 
 export function onUnauthorized(callback) {
+  if (!socket) {
+    console.log("NO SOCKET");
+    return;
+  }
+
   socket.on("error", function(err) {
     if (err === "Authentication error") {
       logout();
       callback();
     }
+  });
+}
+
+export function onDisconnect(callback) {
+  if (!socket) {
+    console.log("NO SOCKET");
+    return;
+  }
+
+  socket.on("disconnect", () => {
+    socket.off("chat");
+    callback();
   });
 }
 
@@ -35,6 +52,7 @@ export function sendMessage(message) {
   socket.emit("chat", { message });
 }
 
+var subscribedToMessages = false;
 export function subscribeMessages(callback) {
   if (!socket) {
     console.log("NO SOCKET");

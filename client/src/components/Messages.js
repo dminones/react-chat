@@ -43,9 +43,6 @@ class Messages extends Component {
   }
 
   render() {
-    if (!this.props.connected) {
-      return null;
-    }
     return (
       <ChatArea>
         <ReactList

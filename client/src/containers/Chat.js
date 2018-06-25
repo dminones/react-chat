@@ -3,7 +3,7 @@ import TextInput from "../components/TextInput";
 import Messages from "../components/Messages";
 import ChatUsers from "../components/ChatUsers";
 import styled from "styled-components";
-import { connectSocket, onUnauthorized } from "../services/chat";
+import { connectSocket, onUnauthorized, onDisconnect } from "../services/chat";
 import { logout } from "../services/user";
 import { Redirect } from "react-router-dom";
 
@@ -43,6 +43,7 @@ class Chat extends Component {
       this.setState({ connected: true });
     });
     onUnauthorized(() => this.setState({ unauthorized: true }));
+    onDisconnect(() => this.setState({ connected: false }));
   }
 
   render() {
