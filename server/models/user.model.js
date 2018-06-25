@@ -7,7 +7,6 @@ const { sessionSecret } = Constants.security;
 class User {
   static findOne(username) {
     const user = users[username];
-    console.log("user ->", user);
     return user ? new User(username, user) : null;
   }
 

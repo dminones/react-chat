@@ -39,13 +39,7 @@ class TextInput extends Component {
 
   _handleOnChange(e) {
     const input = e.target.value;
-    if (!this.state.input && input) {
-      tiping(true);
-    }
-
-    if (this.state.input && !input) {
-      tiping(false);
-    }
+    tiping(input !== EMPTY_INPUT);
 
     this.setState({
       input
