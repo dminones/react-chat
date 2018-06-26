@@ -1,5 +1,5 @@
 {
-  "name": "example-create-react-app-express",
+  "name": "react-chat",
   "version": "1.0.0",
   "scripts": {
     "preinstall": "cd client && npm install",

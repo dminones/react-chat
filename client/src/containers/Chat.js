@@ -61,12 +61,12 @@ class Chat extends Component {
       this.setState(() => ({
         currentUser: user
       }));
+    });
 
-      subscribeUserUpdates(users => {
-        this.setState(() => ({
-          users: users.filter(u => u.username.indexOf(user.username) < 0)
-        }));
-      });
+    subscribeUserUpdates(users => {
+      this.setState(() => ({
+        users: users
+      }));
     });
 
     subscribeMessages(msg => {
